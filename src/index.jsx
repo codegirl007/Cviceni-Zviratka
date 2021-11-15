@@ -1,20 +1,43 @@
-import React from 'react';
-import { render } from 'react-dom';
-import './style.css';
+import React, { useState, useEffect } from "react";
+import { render } from "react-dom";
+import { AnimalDetail } from "./components/AnimalDetail/AnimalDetail";
+import { AnimalList } from "./components/AnimalList/AnimalList";
+import "./style.css";
 
-const App = () => (
-  <div className="container">
-    <header>
-      <div className="logo"></div>
-      <h1>Webová aplikace</h1>
-    </header>
-    <main>
-      <p>Startovací šablona pro webovou aplikaci v Reactu. Vytvořeno pomocí <a href="https://www.npmjs.com/package/create-czechitas-app">create-czechitas-app</a>.</p>
-    </main>
-    <footer>
-      <p>Czechitas, Digitální akademie: Web</p>
-    </footer>
-  </div>
-);
+const App = () => {
+  const [data, setData] = useState(null);
+  const [zooData, setZooData] = useState(null);
+  const [selectedAnimalIndex, setSelectedAnimalIndex] = useState(0);
 
-render(<App />, document.querySelector('#app'));
+  useEffect(() => {
+    fetch("https://lrolecek.github.io/zviratka-api/zvirata.json")
+      .then((response) => response.json())
+      .then((data) => setData(data));
+  }, []);
+
+  useEffect(() => {
+    fetch("https://lrolecek.github.io/zviratka-api/zoo.json")
+      .then((response) => response.json())
+      .then((data) => setZooData(data));
+  }, []);
+
+  const chooseAnimal = (animalIndex) => {
+    setSelectedAnimalIndex(animalIndex);
+  };
+
+  return (
+    <>
+      <h1>Zvířátka v ZOO</h1>
+      <div className="container">
+        <AnimalList data={data} chooseAnimal={chooseAnimal} />
+        <AnimalDetail
+          selectedAnimalIndex={selectedAnimalIndex}
+          data={data}
+          zooData={zooData}
+        />
+      </div>
+    </>
+  );
+};
+
+render(<App />, document.querySelector("#app"));
