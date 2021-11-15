@@ -1,9 +1,9 @@
 import React from "react";
 import "./Animal.css";
 
-export const Animal = ({ foto, nazev, nazevLatinsky, chooseAnimal, index }) => {
+export const Animal = ({ foto, nazev, nazevLatinsky, chooseAnimal }) => {
   const showAnimalDetail = () => {
-    chooseAnimal(index);
+    chooseAnimal(nazev);
   };
 
   return (
